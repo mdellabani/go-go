@@ -3,6 +3,9 @@ import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import type { SearchSchemaInput } from '@tanstack/react-router'
 import GoRunner from '#/components/GoRunner'
 import { sections } from '#/content/sections'
+import { orientation } from '#/content/orientation'
+import { track } from '#/content/track'
+import type { Block } from '#/content/types'
 
 const DEFAULT = `package main
 
@@ -13,9 +16,14 @@ func main() {
 }
 `
 
-const allSnippets = sections.flatMap((s) =>
-  s.blocks.filter((b) => b.kind === 'run').map((b) => ({ section: s.title, ...b.snippet })),
-)
+const pick = (group: string, blocks: Block[]) =>
+  blocks.filter((b) => b.kind === 'run').map((b) => ({ group, ...b.snippet }))
+
+const allSnippets = [
+  ...orientation.flatMap((q) => pick('orientation', q.blocks)),
+  ...track.flatMap((s) => pick(`build · ${s.title}`, s.blocks)),
+  ...sections.flatMap((s) => pick(`reference · ${s.title}`, s.blocks)),
+]
 
 function encode(src: string) {
   return btoa(String.fromCharCode(...new TextEncoder().encode(src)))
@@ -33,7 +41,7 @@ export const Route = createFileRoute('/playground')({
   validateSearch: (raw: { c?: string } & SearchSchemaInput): { c?: string } => ({
     c: typeof raw.c === 'string' ? raw.c : undefined,
   }),
-  head: () => ({ meta: [{ title: 'Go playground' }] }),
+  head: () => ({ meta: [{ title: 'Playground — go-go' }] }),
   component: PlaygroundPage,
 })
 
@@ -43,18 +51,15 @@ function PlaygroundPage() {
   const [copied, setCopied] = useState(false)
 
   const code = c ? decode(c) : DEFAULT
-
   const load = (src: string) => navigate({ search: { c: encode(src) } })
 
   return (
-    <main className="page-wrap px-4 pb-16 pt-10">
-      <p className="island-kicker mb-2">Scratch</p>
-      <h1 className="display-title mb-3 text-3xl font-bold tracking-tight text-[var(--sea-ink)] sm:text-4xl">
-        Playground
-      </h1>
-      <p className="mb-6 max-w-2xl text-[var(--sea-ink-soft)]">
-        The program lives in the URL, so a link carries the code with it. Load any snippet
-        from the notes below and start breaking it.
+    <main className="page-wrap px-4 pb-16 pt-8">
+      <p className="kicker mb-2">scratch</p>
+      <h1 className="display mb-3 text-2xl text-[var(--ink)] sm:text-[2rem]">Playground</h1>
+      <p className="mb-6 max-w-2xl text-[0.95rem] leading-[1.7] text-[var(--ink-dim)]">
+        The program is base64-encoded into the URL, so a link carries the code with it. Load any
+        snippet from the site and start breaking it.
       </p>
 
       <div className="mb-4 flex flex-wrap gap-2">
@@ -65,34 +70,30 @@ function PlaygroundPage() {
             setCopied(true)
             setTimeout(() => setCopied(false), 1500)
           }}
-          className="rounded-full border border-[var(--chip-line)] bg-[var(--chip-bg)] px-3 py-1.5 text-sm font-semibold text-[var(--sea-ink-soft)] hover:bg-[var(--link-bg-hover)]"
+          className="btn btn-ghost"
         >
           {copied ? 'copied ✓' : 'copy share link'}
         </button>
-        <button
-          type="button"
-          onClick={() => load(DEFAULT)}
-          className="rounded-full border border-[var(--chip-line)] bg-[var(--chip-bg)] px-3 py-1.5 text-sm font-semibold text-[var(--sea-ink-soft)] hover:bg-[var(--link-bg-hover)]"
-        >
+        <button type="button" onClick={() => load(DEFAULT)} className="btn btn-ghost">
           blank program
         </button>
       </div>
 
       <GoRunner key={c ?? 'default'} code={code} minHeight="24rem" />
 
-      <h2 className="mb-3 mt-10 text-sm font-semibold uppercase tracking-wide text-[var(--kicker)]">
-        Load a snippet
-      </h2>
+      <h2 className="kicker mb-3 mt-10">load a snippet</h2>
       <div className="grid gap-2 sm:grid-cols-2">
         {allSnippets.map((s) => (
           <button
-            key={s.id}
+            key={s.group + s.id}
             type="button"
             onClick={() => load(s.code)}
-            className="island-shell rounded-xl px-4 py-3 text-left transition hover:-translate-y-0.5"
+            className="panel card-lift rounded-lg px-4 py-3 text-left transition"
           >
-            <span className="block text-sm font-semibold text-[var(--sea-ink)]">{s.title}</span>
-            <span className="block text-xs text-[var(--sea-ink-soft)]">{s.section}</span>
+            <span className="mono block text-[0.8125rem] font-bold text-[var(--ink)]">
+              {s.title}
+            </span>
+            <span className="kicker mt-0.5 block">{s.group}</span>
           </button>
         ))}
       </div>

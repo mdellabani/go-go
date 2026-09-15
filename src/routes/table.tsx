@@ -5,7 +5,7 @@ import { translation, type Row } from '#/content/translation'
 const CATEGORIES = ['all', 'syntax', 'types', 'concurrency', 'tooling', 'structure'] as const
 type Category = (typeof CATEGORIES)[number]
 
-const SORTS = ['none', 'java', 'go'] as const
+const SORTS = ['none', 'java', 'rust', 'go'] as const
 type Sort = (typeof SORTS)[number]
 
 // Output type: always fully populated, so components never handle undefined.
@@ -14,8 +14,6 @@ type Search = { q: string; cat: Category; sort: Sort }
 type SearchInput = { q?: string; cat?: Category; sort?: Sort }
 
 export const Route = createFileRoute('/table')({
-  // Search params are validated here, so every consumer downstream is fully typed.
-  // Link to="/table" search={{ cat: 'nope' }} is a COMPILE error.
   // SearchSchemaInput brands the parameter as the INPUT type. Without it the router
   // derives the input from the return type and demands every field on every <Link>.
   validateSearch: (raw: SearchInput & SearchSchemaInput): Search => ({
@@ -23,7 +21,7 @@ export const Route = createFileRoute('/table')({
     cat: CATEGORIES.includes(raw.cat as Category) ? (raw.cat as Category) : 'all',
     sort: SORTS.includes(raw.sort as Sort) ? (raw.sort as Sort) : 'none',
   }),
-  head: () => ({ meta: [{ title: 'Java → Go translation table' }] }),
+  head: () => ({ meta: [{ title: 'Java · Rust · Go translation table — go-go' }] }),
   component: TablePage,
 })
 
@@ -31,10 +29,17 @@ function matches(row: Row, q: string) {
   const needle = q.toLowerCase()
   return (
     row.java.toLowerCase().includes(needle) ||
+    row.rust.toLowerCase().includes(needle) ||
     row.go.toLowerCase().includes(needle) ||
     row.note.toLowerCase().includes(needle)
   )
 }
+
+const COLS = [
+  { key: 'java', label: 'Java', tag: 'tag-java' },
+  { key: 'rust', label: 'Rust', tag: 'tag-rust' },
+  { key: 'go', label: 'Go', tag: 'tag-go' },
+] as const
 
 function TablePage() {
   const { q, cat, sort } = Route.useSearch()
@@ -49,14 +54,15 @@ function TablePage() {
     .toSorted((a, b) => (sort === 'none' ? 0 : a[sort].localeCompare(b[sort])))
 
   return (
-    <main className="page-wrap px-4 pb-16 pt-10">
-      <p className="island-kicker mb-2">Reference</p>
-      <h1 className="display-title mb-3 text-3xl font-bold tracking-tight text-[var(--sea-ink)] sm:text-4xl">
-        Java → Go
+    <main className="page-wrap px-4 pb-16 pt-8">
+      <p className="kicker mb-2">reference</p>
+      <h1 className="display mb-3 text-2xl text-[var(--ink)] sm:text-[2rem]">
+        Java · Rust · Go
       </h1>
-      <p className="mb-6 max-w-2xl text-[var(--sea-ink-soft)]">
-        Filter state lives in the URL and is validated by the route, so this view is
-        bookmarkable, shareable, and survives a refresh. Copy the address bar after filtering.
+      <p className="mb-6 max-w-2xl text-[0.95rem] leading-[1.7] text-[var(--ink-dim)]">
+        The same idea in three languages. Filter state lives in the URL and is validated by the
+        route, so this view is bookmarkable and survives a refresh — copy the address bar after
+        filtering.
       </p>
 
       <div className="mb-6 flex flex-wrap items-center gap-2">
@@ -64,59 +70,60 @@ function TablePage() {
           value={q}
           onChange={(e) => setSearch({ q: e.target.value })}
           placeholder="filter…"
-          className="min-w-48 flex-1 rounded-full border border-[var(--chip-line)] bg-[var(--chip-bg)] px-4 py-2 text-sm text-[var(--sea-ink)] outline-none focus:border-[var(--lagoon-deep)]"
+          className="mono min-w-44 flex-1 rounded-lg border-2 border-[var(--line-hard)] bg-[var(--surface)] px-3 py-2 text-[0.8125rem] text-[var(--ink)] outline-none placeholder:text-[var(--ink-dim)] focus:border-[var(--accent)]"
         />
         {CATEGORIES.map((c) => (
           <button
             key={c}
             type="button"
             onClick={() => setSearch({ cat: c })}
-            className={`rounded-full border px-3 py-1.5 text-sm font-semibold transition ${
-              c === cat
-                ? 'border-transparent bg-[var(--lagoon-deep)] text-white'
-                : 'border-[var(--chip-line)] bg-[var(--chip-bg)] text-[var(--sea-ink-soft)] hover:bg-[var(--link-bg-hover)]'
-            }`}
+            className={c === cat ? 'btn btn-go' : 'btn btn-ghost'}
           >
             {c}
           </button>
         ))}
       </div>
 
-      <div className="island-shell overflow-x-auto rounded-2xl">
-        <table className="w-full text-left text-sm">
+      <div className="panel overflow-x-auto rounded-lg">
+        <table className="w-full min-w-[720px] border-collapse text-left">
           <thead>
-            <tr className="border-b border-[var(--line)]">
-              {(['java', 'go'] as const).map((col) => (
-                <th key={col} className="px-4 py-3">
+            <tr className="border-b-2 border-[var(--line-hard)] bg-[var(--foam)]">
+              {COLS.map((col) => (
+                <th key={col.key} className="px-3 py-2.5">
                   <button
                     type="button"
-                    onClick={() => setSearch({ sort: sort === col ? 'none' : col })}
-                    className="font-semibold text-[var(--sea-ink)] hover:text-[var(--lagoon-deep)]"
+                    onClick={() => setSearch({ sort: sort === col.key ? 'none' : col.key })}
+                    className={`tag ${col.tag} cursor-pointer`}
                   >
-                    {col === 'java' ? 'Java' : 'Go'} {sort === col ? '↑' : ''}
+                    {col.label} {sort === col.key ? '↑' : ''}
                   </button>
                 </th>
               ))}
-              <th className="px-4 py-3 font-semibold text-[var(--sea-ink)]">note</th>
+              <th className="kicker px-3 py-2.5">note</th>
             </tr>
           </thead>
           <tbody>
             {rows.map((r) => (
-              <tr key={r.java} className="border-b border-[var(--line)] last:border-0">
-                <td className="px-4 py-2 align-top font-mono text-xs text-[var(--sea-ink-soft)]">
+              <tr key={r.go + r.java} className="border-b border-[var(--line)] last:border-0">
+                <td className="mono px-3 py-2.5 align-top text-[0.75rem] text-[var(--ink-dim)]">
                   {r.java}
                 </td>
-                <td className="px-4 py-2 align-top font-mono text-xs text-[var(--sea-ink)]">
+                <td className="mono px-3 py-2.5 align-top text-[0.75rem] text-[var(--ink-dim)]">
+                  {r.rust}
+                </td>
+                <td className="mono px-3 py-2.5 align-top text-[0.75rem] font-semibold text-[var(--ink)]">
                   {r.go}
                 </td>
-                <td className="px-4 py-2 align-top text-[var(--sea-ink-soft)]">{r.note}</td>
+                <td className="px-3 py-2.5 align-top text-[0.8125rem] text-[var(--ink-dim)]">
+                  {r.note}
+                </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
 
-      <p className="mt-4 text-sm text-[var(--sea-ink-soft)]">
+      <p className="kicker mt-4">
         {rows.length} of {translation.length} rows
       </p>
     </main>

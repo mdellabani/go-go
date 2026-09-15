@@ -19,14 +19,14 @@ export const Route = createRootRoute({
       {
         name: 'description',
         content:
-          'Go, explained for a Java developer, with every example runnable against the real Go compiler.',
+          'Go for experienced developers: what kind of language it is, then build one HTTP service. Java and Rust comparisons, every snippet runnable.',
       },
       {
         name: 'viewport',
         content: 'width=device-width, initial-scale=1',
       },
       {
-        title: 'Go for Java devs — runnable notes',
+        title: 'go-go — Go for people who already ship software',
       },
     ],
     links: [
@@ -55,7 +55,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
         <HeadContent />
       </head>
-      <body className="font-sans antialiased [overflow-wrap:anywhere] selection:bg-[rgba(79,184,178,0.24)]">
+      <body className="font-sans antialiased [overflow-wrap:anywhere] selection:bg-[var(--accent)] selection:text-[var(--bg-base)]">
         <QueryClientProvider client={queryClient}>
           <Header />
           {children}

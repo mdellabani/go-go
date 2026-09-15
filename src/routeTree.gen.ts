@@ -12,7 +12,9 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as PlaygroundRouteImport } from './routes/playground'
 import { Route as TableRouteImport } from './routes/table'
+import { Route as BuildStepIdRouteImport } from './routes/build.$stepId'
 import { Route as NotesSectionIdRouteImport } from './routes/notes.$sectionId'
+import { Route as WhyQuestionIdRouteImport } from './routes/why.$questionId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -29,9 +31,19 @@ const TableRoute = TableRouteImport.update({
   path: '/table',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BuildStepIdRoute = BuildStepIdRouteImport.update({
+  id: '/build/$stepId',
+  path: '/build/$stepId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const NotesSectionIdRoute = NotesSectionIdRouteImport.update({
   id: '/notes/$sectionId',
   path: '/notes/$sectionId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const WhyQuestionIdRoute = WhyQuestionIdRouteImport.update({
+  id: '/why/$questionId',
+  path: '/why/$questionId',
   getParentRoute: () => rootRouteImport,
 } as any)
 
@@ -39,34 +51,61 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/playground': typeof PlaygroundRoute
   '/table': typeof TableRoute
+  '/build/$stepId': typeof BuildStepIdRoute
   '/notes/$sectionId': typeof NotesSectionIdRoute
+  '/why/$questionId': typeof WhyQuestionIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/playground': typeof PlaygroundRoute
   '/table': typeof TableRoute
+  '/build/$stepId': typeof BuildStepIdRoute
   '/notes/$sectionId': typeof NotesSectionIdRoute
+  '/why/$questionId': typeof WhyQuestionIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/playground': typeof PlaygroundRoute
   '/table': typeof TableRoute
+  '/build/$stepId': typeof BuildStepIdRoute
   '/notes/$sectionId': typeof NotesSectionIdRoute
+  '/why/$questionId': typeof WhyQuestionIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/playground' | '/table' | '/notes/$sectionId'
+  fullPaths:
+    | '/'
+    | '/playground'
+    | '/table'
+    | '/build/$stepId'
+    | '/notes/$sectionId'
+    | '/why/$questionId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/playground' | '/table' | '/notes/$sectionId'
-  id: '__root__' | '/' | '/playground' | '/table' | '/notes/$sectionId'
+  to:
+    | '/'
+    | '/playground'
+    | '/table'
+    | '/build/$stepId'
+    | '/notes/$sectionId'
+    | '/why/$questionId'
+  id:
+    | '__root__'
+    | '/'
+    | '/playground'
+    | '/table'
+    | '/build/$stepId'
+    | '/notes/$sectionId'
+    | '/why/$questionId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   PlaygroundRoute: typeof PlaygroundRoute
   TableRoute: typeof TableRoute
+  BuildStepIdRoute: typeof BuildStepIdRoute
   NotesSectionIdRoute: typeof NotesSectionIdRoute
+  WhyQuestionIdRoute: typeof WhyQuestionIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -92,11 +131,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TableRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/build/$stepId': {
+      id: '/build/$stepId'
+      path: '/build/$stepId'
+      fullPath: '/build/$stepId'
+      preLoaderRoute: typeof BuildStepIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/notes/$sectionId': {
       id: '/notes/$sectionId'
       path: '/notes/$sectionId'
       fullPath: '/notes/$sectionId'
       preLoaderRoute: typeof NotesSectionIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/why/$questionId': {
+      id: '/why/$questionId'
+      path: '/why/$questionId'
+      fullPath: '/why/$questionId'
+      preLoaderRoute: typeof WhyQuestionIdRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -106,7 +159,9 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   PlaygroundRoute: PlaygroundRoute,
   TableRoute: TableRoute,
+  BuildStepIdRoute: BuildStepIdRoute,
   NotesSectionIdRoute: NotesSectionIdRoute,
+  WhyQuestionIdRoute: WhyQuestionIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

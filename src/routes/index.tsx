@@ -1,60 +1,140 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
+import { orientation } from '#/content/orientation'
+import { track } from '#/content/track'
 import { sections } from '#/content/sections'
 
 export const Route = createFileRoute('/')({ component: Home })
 
 function Home() {
   return (
-    <main className="page-wrap px-4 pb-16 pt-12">
-      <section className="island-shell rise-in relative overflow-hidden rounded-[2rem] px-6 py-10 sm:px-10 sm:py-14">
-        <div className="pointer-events-none absolute -left-20 -top-24 h-56 w-56 rounded-full bg-[radial-gradient(circle,var(--hero-a),transparent_66%)]" />
-        <div className="pointer-events-none absolute -bottom-20 -right-20 h-56 w-56 rounded-full bg-[radial-gradient(circle,var(--hero-b),transparent_66%)]" />
-        <p className="island-kicker mb-3">Notes for a Java developer</p>
-        <h1 className="display-title mb-5 max-w-3xl text-4xl leading-[1.05] font-bold tracking-tight text-[var(--sea-ink)] sm:text-6xl">
-          Go is C with a garbage collector, cheap threads, and a package manager.
+    <main className="page-wrap px-4 pb-20 pt-10">
+      <section className="rise-in mb-14">
+        <p className="kicker prompt mb-4">go-go — Go for people who already ship software</p>
+        <h1 className="display mb-5 max-w-4xl text-[1.75rem] leading-[1.15] text-[var(--ink)] sm:text-[2.75rem]">
+          Go is C with a garbage collector, cheap threads,
+          <br className="hidden sm:block" /> and a package manager
+          <span className="blink" />
         </h1>
-        <p className="mb-8 max-w-2xl text-base text-[var(--sea-ink-soft)] sm:text-lg">
-          No VM. No JIT. No classes, no inheritance, no exceptions. Eleven sections, every
-          example editable and compiled by the real Go toolchain — break them and read the error.
+        <p className="mb-8 max-w-2xl text-base leading-[1.7] text-[var(--ink-dim)]">
+          You already know how compilers, memory and threads work. This does not teach you
+          programming again — it answers the questions you would actually ask, then has you build
+          one real service. Every snippet is editable and compiled by the real Go toolchain.
         </p>
         <div className="flex flex-wrap gap-3">
-          <Link
-            to="/notes/$sectionId"
-            params={{ sectionId: 'syntax' }}
-            className="rounded-full bg-[var(--lagoon-deep)] px-5 py-2.5 text-sm font-semibold text-white no-underline transition hover:-translate-y-0.5 hover:brightness-110"
-          >
-            Start at the syntax →
+          <Link to="/why/$questionId" params={{ questionId: 'jvm' }} className="btn btn-go">
+            Start here ▸ 9 questions
           </Link>
-          <Link
-            to="/table"
-            className="rounded-full border border-[var(--chip-line)] bg-[var(--chip-bg)] px-5 py-2.5 text-sm font-semibold text-[var(--sea-ink)] no-underline transition hover:-translate-y-0.5"
-          >
-            Java → Go table
-          </Link>
-          <Link
-            to="/playground"
-            className="rounded-full border border-[var(--chip-line)] bg-[var(--chip-bg)] px-5 py-2.5 text-sm font-semibold text-[var(--sea-ink)] no-underline transition hover:-translate-y-0.5"
-          >
-            Playground
+          <Link to="/build/$stepId" params={{ stepId: 'serve' }} className="btn">
+            Skip to building
           </Link>
         </div>
       </section>
 
-      <section className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {sections.map((s, i) => (
-          <Link
-            key={s.id}
-            to="/notes/$sectionId"
-            params={{ sectionId: s.id }}
-            className="island-shell feature-card rise-in rounded-2xl p-5 no-underline transition hover:-translate-y-1"
-            style={{ animationDelay: `${i * 50 + 60}ms` }}
-          >
-            <span className="island-kicker mb-1 block text-xs">{String(s.n).padStart(2, '0')}</span>
-            <h2 className="mb-2 text-base font-semibold text-[var(--sea-ink)]">{s.title}</h2>
-            <p className="m-0 text-sm text-[var(--sea-ink-soft)]">{s.blurb}</p>
-          </Link>
-        ))}
-      </section>
+      <div className="space-y-5">
+        <Tier
+          n="01"
+          title="Orientation"
+          tagline="What kind of language is this, before any syntax."
+          meta={`${orientation.length} questions · no code required`}
+          to={<Link to="/why/$questionId" params={{ questionId: 'jvm' }} className="btn btn-go">Start ▸</Link>}
+          items={orientation.map((q) => ({
+            key: q.id,
+            label: q.q,
+            to: (
+              <Link
+                key={q.id}
+                to="/why/$questionId"
+                params={{ questionId: q.id }}
+                className="mono block rounded px-2 py-1.5 text-[0.8125rem] text-[var(--ink-dim)] no-underline hover:bg-[var(--link-bg-hover)] hover:text-[var(--ink)]"
+              >
+                <span className="mr-2 text-[var(--accent)]">{String(q.n).padStart(2, '0')}</span>
+                {q.q}
+              </Link>
+            ),
+          }))}
+        />
+
+        <Tier
+          n="02"
+          title="Build one service"
+          tagline="An HTTP service, end to end. Each concept shows up because the program needs it."
+          meta={`${track.length} steps · every step runnable`}
+          to={<Link to="/build/$stepId" params={{ stepId: 'serve' }} className="btn btn-go">Build ▸</Link>}
+          items={track.map((s) => ({
+            key: s.id,
+            label: s.title,
+            to: (
+              <Link
+                key={s.id}
+                to="/build/$stepId"
+                params={{ stepId: s.id }}
+                className="mono block rounded px-2 py-1.5 text-[0.8125rem] text-[var(--ink-dim)] no-underline hover:bg-[var(--link-bg-hover)] hover:text-[var(--ink)]"
+              >
+                <span className="mr-2 text-[var(--accent)]">{String(s.n).padStart(2, '0')}</span>
+                {s.title}
+              </Link>
+            ),
+          }))}
+        />
+
+        <Tier
+          n="03"
+          title="Reference"
+          tagline="For looking things up once you are writing Go, not for reading front to back."
+          meta={`${sections.length} deep dives · translation table · playground`}
+          to={<Link to="/table" className="btn">Look up ▸</Link>}
+          items={sections.map((s) => ({
+            key: s.id,
+            label: s.title,
+            to: (
+              <Link
+                key={s.id}
+                to="/notes/$sectionId"
+                params={{ sectionId: s.id }}
+                className="mono block rounded px-2 py-1.5 text-[0.8125rem] text-[var(--ink-dim)] no-underline hover:bg-[var(--link-bg-hover)] hover:text-[var(--ink)]"
+              >
+                <span className="mr-2 text-[var(--accent)]">{String(s.n).padStart(2, '0')}</span>
+                {s.title}
+              </Link>
+            ),
+          }))}
+        />
+      </div>
     </main>
+  )
+}
+
+function Tier({
+  n,
+  title,
+  tagline,
+  meta,
+  to,
+  items,
+}: {
+  n: string
+  title: string
+  tagline: string
+  meta: string
+  to: React.ReactNode
+  items: { key: string; label: string; to: React.ReactNode }[]
+}) {
+  return (
+    <section className="panel rise-in rounded-xl p-5 sm:p-6">
+      <div className="mb-4 flex flex-wrap items-start gap-4">
+        <span className="display text-[2.5rem] leading-none text-[var(--accent)] opacity-40">
+          {n}
+        </span>
+        <div className="min-w-56 flex-1">
+          <h2 className="display m-0 mb-1.5 text-lg text-[var(--ink)]">{title}</h2>
+          <p className="m-0 max-w-xl text-[0.9rem] leading-[1.6] text-[var(--ink-dim)]">{tagline}</p>
+          <p className="kicker mt-2">{meta}</p>
+        </div>
+        <div className="ml-auto">{to}</div>
+      </div>
+      <div className="grid gap-x-4 border-t border-[var(--line)] pt-3 sm:grid-cols-2 lg:grid-cols-3">
+        {items.map((it) => it.to)}
+      </div>
+    </section>
   )
 }

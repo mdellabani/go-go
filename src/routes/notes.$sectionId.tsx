@@ -9,14 +9,14 @@ export const Route = createFileRoute('/notes/$sectionId')({
     return { section }
   },
   head: ({ loaderData }) => ({
-    meta: [{ title: `${loaderData?.section.title} — Go for Java devs` }],
+    meta: loaderData ? [{ title: `${loaderData.section.title} — go-go reference` }] : [],
   }),
   component: SectionPage,
   notFoundComponent: () => (
     <main className="page-wrap px-4 py-16">
-      <h1 className="display-title text-3xl">No such section</h1>
-      <Link to="/" className="nav-link">
-        Back to the index
+      <h1 className="display text-2xl">404 — no such section</h1>
+      <Link to="/" className="nav-link mt-4 inline-flex">
+        back to start
       </Link>
     </main>
   ),
@@ -29,25 +29,45 @@ function SectionPage() {
   const next = sections[idx + 1]
 
   return (
-    <main className="page-wrap px-4 pb-16 pt-10">
-      <p className="island-kicker mb-2">Section {section.n} of {sections.length}</p>
-      <h1 className="display-title mb-3 text-3xl font-bold tracking-tight text-[var(--sea-ink)] sm:text-4xl">
-        {section.title}
-      </h1>
-      <p className="mb-8 max-w-2xl text-lg text-[var(--sea-ink-soft)]">{section.blurb}</p>
+    <main className="page-wrap px-4 pb-16 pt-8">
+      <div className="mb-8 flex flex-wrap items-center gap-1.5">
+        <Link to="/" className="kicker mr-2 no-underline hover:text-[var(--ink)]">
+          reference
+        </Link>
+        {sections.map((s, i) => (
+          <Link
+            key={s.id}
+            to="/notes/$sectionId"
+            params={{ sectionId: s.id }}
+            title={s.title}
+            className={`chip-n no-underline ${i === idx ? 'chip-n-now' : ''}`}
+          >
+            {s.n}
+          </Link>
+        ))}
+      </div>
 
-      <Blocks blocks={section.blocks} />
+      <article className="rise-in">
+        <h1 className="display mb-3 max-w-3xl text-2xl leading-tight text-[var(--ink)] sm:text-[2rem]">
+          {section.title}
+        </h1>
+        <p className="mb-9 max-w-2xl text-base leading-[1.7] text-[var(--ink-dim)]">
+          {section.blurb}
+        </p>
 
-      <nav className="mt-12 flex items-center justify-between gap-4 border-t border-[var(--line)] pt-6 text-sm font-semibold">
+        <Blocks blocks={section.blocks} />
+      </article>
+
+      <nav className="mt-14 flex flex-col gap-3 border-t-2 border-[var(--line-hard)] pt-6 sm:flex-row sm:items-center">
         {prev ? (
-          <Link to="/notes/$sectionId" params={{ sectionId: prev.id }} className="nav-link">
+          <Link to="/notes/$sectionId" params={{ sectionId: prev.id }} className="btn btn-ghost">
             ← {prev.title}
           </Link>
         ) : (
           <span />
         )}
         {next ? (
-          <Link to="/notes/$sectionId" params={{ sectionId: next.id }} className="nav-link ml-auto">
+          <Link to="/notes/$sectionId" params={{ sectionId: next.id }} className="btn sm:ml-auto">
             {next.title} →
           </Link>
         ) : null}

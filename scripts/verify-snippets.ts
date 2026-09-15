@@ -1,8 +1,16 @@
 import { sections } from '../src/content/sections.ts'
+import { orientation } from '../src/content/orientation.ts'
+import { track } from '../src/content/track.ts'
+import type { Block } from '../src/content/types.ts'
 
-const runnable = sections.flatMap((s) =>
-  s.blocks.filter((b) => b.kind === 'run').map((b) => ({ section: s.id, ...b.snippet })),
-)
+const collect = (group: string, id: string, blocks: Block[]) =>
+  blocks.filter((b) => b.kind === 'run').map((b) => ({ where: `${group}/${id}`, ...b.snippet }))
+
+const runnable = [
+  ...orientation.flatMap((q) => collect('why', q.id, q.blocks)),
+  ...track.flatMap((s) => collect('build', s.id, s.blocks)),
+  ...sections.flatMap((s) => collect('notes', s.id, s.blocks)),
+]
 
 let failed = 0
 
@@ -18,7 +26,7 @@ for (const s of runnable) {
     Events: Array<{ Message: string }> | null
   }
 
-  const label = `${s.section}/${s.id}`
+  const label = `${s.where}/${s.id}`
   if (out.Errors || out.VetErrors) {
     failed++
     console.log(`FAIL ${label}\n${out.Errors}${out.VetErrors}`)

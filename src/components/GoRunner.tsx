@@ -53,13 +53,13 @@ export default function GoRunner({
   const dirty = code !== initial
 
   return (
-    <div className="island-shell overflow-hidden rounded-2xl">
-      <div className="flex items-center gap-2 border-b border-[var(--line)] px-3 py-2">
+    <div className="panel overflow-hidden rounded-lg">
+      <div className="flex items-center gap-2 border-b-2 border-[var(--line-hard)] bg-[var(--foam)] px-3 py-2">
         <button
           type="button"
           onClick={() => run.mutate(code)}
           disabled={run.isPending}
-          className="rounded-full bg-[var(--lagoon-deep)] px-4 py-1.5 text-sm font-semibold text-white transition hover:brightness-110 disabled:opacity-50"
+          className="btn btn-go"
         >
           {run.isPending ? 'Running…' : 'Run ▸'}
         </button>
@@ -70,13 +70,11 @@ export default function GoRunner({
             run.reset()
           }}
           disabled={!dirty}
-          className="rounded-full border border-[var(--chip-line)] px-3 py-1.5 text-sm font-semibold text-[var(--sea-ink-soft)] transition hover:bg-[var(--link-bg-hover)] disabled:opacity-40"
+          className="btn btn-ghost"
         >
           Reset
         </button>
-        <span className="ml-auto text-xs text-[var(--sea-ink-soft)]">
-          {dirty ? 'edited' : 'go.dev playground'}
-        </span>
+        <span className="kicker ml-auto">{dirty ? 'edited' : 'go.dev'}</span>
       </div>
 
       <CodeMirror
@@ -98,8 +96,8 @@ export default function GoRunner({
       <Output result={run.data} error={run.error} />
 
       {hint ? (
-        <p className="border-t border-[var(--line)] px-3 py-2 text-sm text-[var(--sea-ink-soft)]">
-          <span className="font-semibold text-[var(--palm)]">Try it: </span>
+        <p className="border-t-2 border-[var(--line-hard)] bg-[var(--foam)] px-3 py-2.5 text-[0.8125rem] leading-[1.6] text-[var(--ink-dim)]">
+          <span className="mono font-bold text-[var(--accent)]">try it: </span>
           {hint}
         </p>
       ) : null}
