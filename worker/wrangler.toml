@@ -1,0 +1,3 @@
+name = "go-notes-playground"
+main = "index.ts"
+compatibility_date = "2026-09-01"
