@@ -13,7 +13,7 @@ export const Route = createFileRoute('/why/$questionId')({
   }),
   component: QuestionPage,
   notFoundComponent: () => (
-    <main className="page-wrap px-4 py-16">
+    <main className="page-wrap max-w-3xl px-4 py-16">
       <h1 className="display text-2xl">404 — no such question</h1>
       <Link to="/" className="nav-link mt-4 inline-flex">
         back to start
@@ -30,7 +30,7 @@ function QuestionPage() {
   const pct = ((idx + 1) / orientation.length) * 100
 
   return (
-    <main className="page-wrap px-4 pb-16 pt-8">
+    <main className="page-wrap max-w-3xl px-4 pb-16 pt-8">
       <div className="mb-8 flex items-center gap-3">
         <Link to="/" className="kicker no-underline hover:text-[var(--ink)]">
           orientation
@@ -59,7 +59,7 @@ function QuestionPage() {
       </div>
 
       <article className="rise-in">
-        <h1 className="display mb-4 max-w-3xl text-2xl leading-tight text-[var(--ink)] sm:text-[2rem]">
+        <h1 className="display mb-4 text-2xl leading-tight text-[var(--ink)] sm:text-[2rem]">
           {question.q}
         </h1>
 

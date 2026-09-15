@@ -15,7 +15,7 @@ export const Route = createFileRoute('/build/$stepId')({
   }),
   component: StepPage,
   notFoundComponent: () => (
-    <main className="page-wrap px-4 py-16">
+    <main className="page-wrap max-w-3xl px-4 py-16">
       <h1 className="display text-2xl">404 — no such step</h1>
       <Link to="/" className="nav-link mt-4 inline-flex">
         back to start
@@ -33,7 +33,7 @@ function StepPage() {
   const exercise = exercises[step.id]
 
   return (
-    <main className="page-wrap px-4 pb-16 pt-8">
+    <main className="page-wrap max-w-3xl px-4 pb-16 pt-8">
       <div className="mb-8 flex items-center gap-3">
         <Link to="/" className="kicker no-underline hover:text-[var(--ink)]">
           build a service
@@ -63,7 +63,7 @@ function StepPage() {
 
       <article className="rise-in">
         <p className="kicker mb-2">step {String(step.n).padStart(2, '0')}</p>
-        <h1 className="display mb-4 max-w-3xl text-2xl leading-tight text-[var(--ink)] sm:text-[2rem]">
+        <h1 className="display mb-4 text-2xl leading-tight text-[var(--ink)] sm:text-[2rem]">
           {step.title}
         </h1>
 

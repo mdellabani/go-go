@@ -13,7 +13,7 @@ export const Route = createFileRoute('/notes/$sectionId')({
   }),
   component: SectionPage,
   notFoundComponent: () => (
-    <main className="page-wrap px-4 py-16">
+    <main className="page-wrap max-w-3xl px-4 py-16">
       <h1 className="display text-2xl">404 — no such section</h1>
       <Link to="/" className="nav-link mt-4 inline-flex">
         back to start
@@ -29,7 +29,7 @@ function SectionPage() {
   const next = sections[idx + 1]
 
   return (
-    <main className="page-wrap px-4 pb-16 pt-8">
+    <main className="page-wrap max-w-3xl px-4 pb-16 pt-8">
       <div className="mb-8 flex flex-wrap items-center gap-1.5">
         <Link to="/" className="kicker mr-2 no-underline hover:text-[var(--ink)]">
           reference
@@ -49,10 +49,10 @@ function SectionPage() {
       </div>
 
       <article className="rise-in">
-        <h1 className="display mb-3 max-w-3xl text-2xl leading-tight text-[var(--ink)] sm:text-[2rem]">
+        <h1 className="display mb-3 text-2xl leading-tight text-[var(--ink)] sm:text-[2rem]">
           {section.title}
         </h1>
-        <p className="mb-9 max-w-2xl text-base leading-[1.7] text-[var(--ink-dim)]">
+        <p className="mb-9 text-base leading-[1.7] text-[var(--ink-dim)]">
           {section.blurb}
         </p>
 

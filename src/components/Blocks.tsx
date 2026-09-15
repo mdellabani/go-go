@@ -20,14 +20,14 @@ export default function Blocks({ blocks }: { blocks: Block[] }) {
         switch (b.kind) {
           case 'p':
             return (
-              <p key={i} className="max-w-3xl text-[0.975rem] leading-[1.75] text-[var(--ink-dim)]">
+              <p key={i} className="text-[0.975rem] leading-[1.75] text-[var(--ink-dim)]">
                 {b.text}
               </p>
             )
 
           case 'ul':
             return (
-              <ul key={i} className="max-w-3xl space-y-2.5">
+              <ul key={i} className="space-y-2.5">
                 {b.items.map((it) => (
                   <li key={it} className="flex gap-3 text-[0.975rem] leading-[1.7] text-[var(--ink-dim)]">
                     <span className="mono mt-px flex-none text-[var(--accent)]">→</span>
@@ -55,7 +55,7 @@ export default function Blocks({ blocks }: { blocks: Block[] }) {
             return (
               <aside
                 key={i}
-                className="max-w-3xl rounded-lg border-l-4 bg-[var(--foam)] py-3 pl-4 pr-4"
+                className="rounded-lg border-l-4 bg-[var(--foam)] py-3 pl-4 pr-4"
                 style={{ borderColor: ASIDE_COLOR[b.tone] }}
               >
                 <span
