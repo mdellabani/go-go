@@ -50,11 +50,10 @@ function QuestionPage() {
             to="/why/$questionId"
             params={{ questionId: q.id }}
             title={q.q}
-            className={`chip-n no-underline ${
-              i === idx ? 'chip-n-now' : i < idx ? 'chip-n-done' : ''
-            }`}
+            className={`pill ${i === idx ? 'pill-now' : i < idx ? 'pill-done' : ''}`}
           >
-            {q.n}
+            <span className="pill-n">{q.n}</span>
+            {q.nav ?? q.q}
           </Link>
         ))}
       </div>

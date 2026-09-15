@@ -5,6 +5,7 @@ export const sections: Section[] = [
     id: 'syntax',
     n: 1,
     title: 'Functions & syntax',
+    nav: 'Syntax',
     blurb: 'Types come after names. No void. Multiple return values.',
     blocks: [
       {
@@ -82,6 +83,7 @@ func main() {
     id: 'methods',
     n: 2,
     title: 'Methods & receivers',
+    nav: 'Methods',
     blurb: 'A method is a function with an extra parameter list glued on the front.',
     blocks: [
       {
@@ -151,6 +153,7 @@ func main() {
     id: 'interfaces',
     n: 3,
     title: 'Implicit interfaces',
+    nav: 'Interfaces',
     blurb: 'The biggest idea in Go. Interfaces are declared by the consumer, not the producer.',
     blocks: [
       {
@@ -256,6 +259,7 @@ func main() {
     id: 'closures',
     n: 4,
     title: 'Closures',
+    nav: 'Closures',
     blurb: 'Functions are values, they capture variables, and they replace most small classes.',
     blocks: [
       {
@@ -319,6 +323,7 @@ func main() {
     id: 'errors',
     n: 5,
     title: 'Errors are values',
+    nav: 'Errors',
     blurb: 'No exceptions, no stack unwinding. You return errors and the caller checks them.',
     blocks: [
       {
@@ -393,6 +398,7 @@ func main() {
     id: 'memory',
     n: 6,
     title: 'Memory & escape analysis',
+    nav: 'Memory',
     blurb: 'The compiler decides stack vs heap. Perf work in Go means "make this not allocate".',
     blocks: [
       {
@@ -459,6 +465,7 @@ func main() {
     id: 'concurrency',
     n: 7,
     title: 'Goroutines & channels',
+    nav: 'Concurrency',
     blurb: 'go f() costs ~2KB. A million of them is normal.',
     blocks: [
       {
@@ -577,6 +584,7 @@ func main() {
     id: 'defer',
     n: 8,
     title: 'defer',
+    nav: 'defer',
     blurb: 'finally, but attached to a statement and scoped to the function.',
     blocks: [
       {
@@ -626,6 +634,7 @@ func main() {
     id: 'packages',
     n: 9,
     title: 'Packages, imports & layout',
+    nav: 'Packages',
     blurb: 'A package is a directory. Capitalization is the access modifier.',
     blocks: [
       {
@@ -692,6 +701,7 @@ func main() {
     id: 'debugging',
     n: 10,
     title: 'Debugging & profiling',
+    nav: 'Debugging',
     blurb: 'No JFR, no heap dump. Profiles instead — and they are good.',
     blocks: [
       {
@@ -734,6 +744,7 @@ go tool pprof -base old.pprof new.pprof                # LEAK HUNT: diff two hea
     id: 'gotchas',
     n: 11,
     title: 'Gotchas',
+    nav: 'Gotchas',
     blurb: 'The list worth flashcarding. Each one has bitten everybody.',
     blocks: [
       {

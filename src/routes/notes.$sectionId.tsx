@@ -40,9 +40,10 @@ function SectionPage() {
             to="/notes/$sectionId"
             params={{ sectionId: s.id }}
             title={s.title}
-            className={`chip-n no-underline ${i === idx ? 'chip-n-now' : ''}`}
+            className={`pill ${i === idx ? 'pill-now' : ''}`}
           >
-            {s.n}
+            <span className="pill-n">{s.n}</span>
+            {s.nav ?? s.title}
           </Link>
         ))}
       </div>

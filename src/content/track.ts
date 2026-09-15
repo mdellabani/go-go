@@ -5,6 +5,7 @@ export const track: Step[] = [
     id: 'serve',
     n: 1,
     title: 'A server in twelve lines',
+    nav: 'First handler',
     problem: 'You have nothing. You need a process that answers HTTP.',
     learns: ['package main', 'func signatures', 'the stdlib is the framework', 'imports'],
     blocks: [
@@ -63,6 +64,7 @@ func main() {
     id: 'handler',
     n: 2,
     title: 'The handler is an interface',
+    nav: 'Handler interface',
     problem: 'A bare function cannot carry configuration. You need a handler that knows things.',
     learns: ['structs', 'methods and receivers', 'implicit interfaces', 'method sets'],
     blocks: [
@@ -132,6 +134,7 @@ func main() {
     id: 'state',
     n: 3,
     title: 'Give it state (and meet the receiver trap)',
+    nav: 'State',
     problem: 'Your handler needs to remember things between requests. Your first attempt will silently do nothing.',
     learns: ['pointer vs value receivers', 'value semantics', 'when to use *T'],
     blocks: [
@@ -201,6 +204,7 @@ func main() {
     id: 'json',
     n: 4,
     title: 'Speak JSON',
+    nav: 'JSON',
     problem: 'Returning strings is a toy. You need to accept and emit structured data.',
     learns: ['struct tags', 'why capitalisation is not style', 'encoding/json', 'slices and maps'],
     blocks: [
@@ -288,6 +292,7 @@ func main() {
     id: 'errors',
     n: 5,
     title: 'Errors are values, not control flow',
+    nav: 'Errors',
     problem: 'Looking up a missing task must return 404, not crash the process.',
     learns: ['(T, error) returns', 'errors.Is', '%w wrapping', 'sentinel errors'],
     blocks: [
@@ -377,6 +382,7 @@ func main() {
     id: 'defer',
     n: 6,
     title: 'defer, and the cleanup you keep forgetting',
+    nav: 'defer',
     problem: 'Request bodies and files leak unless you close them on every return path.',
     learns: ['defer', 'LIFO order', 'when arguments are evaluated'],
     blocks: [
@@ -447,6 +453,7 @@ func main() {
     id: 'race',
     n: 7,
     title: 'It is already concurrent, and you already have a bug',
+    nav: 'Data race',
     problem: 'net/http runs every request in its own goroutine. Your shared counter is unsynchronised right now.',
     learns: ['shared state', 'sync.Mutex', 'go test -race'],
     blocks: [
@@ -525,6 +532,7 @@ go run -race ./cmd/server
     id: 'workers',
     n: 8,
     title: 'Work you do not want in the request path',
+    nav: 'Workers',
     problem: 'Sending an email should not make the client wait 800ms.',
     learns: ['goroutines', 'channels', 'buffering', 'graceful shutdown'],
     blocks: [
@@ -597,6 +605,7 @@ func main() {
     id: 'context',
     n: 9,
     title: 'context: deadlines that actually propagate',
+    nav: 'context',
     problem: 'A slow database call should not hold a request open forever, and cancelling it must reach every layer.',
     learns: ['context.Context', 'WithTimeout', 'select', 'ctx.Done()'],
     blocks: [
@@ -676,6 +685,7 @@ func main() {
     id: 'middleware',
     n: 10,
     title: 'Middleware is just a closure',
+    nav: 'Middleware',
     problem: 'You need logging and timing on every route without editing every handler.',
     learns: ['functions as values', 'closures', 'http.HandlerFunc', 'wrapping'],
     blocks: [
@@ -752,6 +762,7 @@ func main() {
     id: 'ship',
     n: 11,
     title: 'Ship it',
+    nav: 'Ship it',
     problem: 'It works on your machine. Now make it a binary, a test suite, and something you can profile in production.',
     learns: ['go build', 'table-driven tests', 'pprof', 'container settings'],
     blocks: [

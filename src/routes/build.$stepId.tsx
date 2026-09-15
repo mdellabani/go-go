@@ -50,11 +50,10 @@ function StepPage() {
             to="/build/$stepId"
             params={{ stepId: s.id }}
             title={`${s.n}. ${s.title}`}
-            className={`chip-n no-underline ${
-              i === idx ? 'chip-n-now' : i < idx ? 'chip-n-done' : ''
-            }`}
+            className={`pill ${i === idx ? 'pill-now' : i < idx ? 'pill-done' : ''}`}
           >
-            {s.n}
+            <span className="pill-n">{s.n}</span>
+            {s.nav ?? s.title}
           </Link>
         ))}
       </div>

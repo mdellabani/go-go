@@ -25,6 +25,7 @@ export type Section = {
   id: string
   n: number
   title: string
+  nav?: string
   blurb: string
   blocks: Block[]
 }
@@ -33,6 +34,7 @@ export type Question = {
   id: string
   n: number
   q: string
+  nav?: string
   short: string
   blocks: Block[]
 }
@@ -41,6 +43,7 @@ export type Step = {
   id: string
   n: number
   title: string
+  nav?: string
   problem: string
   learns: string[]
   blocks: Block[]

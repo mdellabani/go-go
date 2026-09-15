@@ -5,6 +5,7 @@ export const orientation: Question[] = [
     id: 'jvm',
     n: 1,
     q: 'Is Go a JVM language?',
+    nav: 'JVM language?',
     short: 'No. There is no VM, no bytecode, and nothing to install on the machine you deploy to.',
     blocks: [
       {
@@ -38,6 +39,7 @@ export const orientation: Question[] = [
     id: 'compiler',
     n: 2,
     q: 'Is the Go compiler like a C compiler or like javac?',
+    nav: 'The compiler',
     short: 'Like a C compiler — straight to machine code, ahead of time — but it optimises for compile speed over peak output.',
     blocks: [
       {
@@ -86,6 +88,7 @@ go build -pgo=auto ./cmd/server`,
     id: 'paradigm',
     n: 3,
     q: 'Is it object-oriented, or functional like C?',
+    nav: 'OO or functional?',
     short: 'Neither. It is structs with methods, plus interfaces that nobody ever declares they implement.',
     blocks: [
       {
@@ -153,6 +156,7 @@ func main() {
     id: 'memory',
     n: 4,
     q: 'How does memory allocation work?',
+    nav: 'Memory',
     short: 'The compiler decides stack or heap for you via escape analysis, and a latency-tuned GC collects the heap.',
     blocks: [
       {
@@ -232,6 +236,7 @@ func main() {
     id: 'concurrency',
     n: 5,
     q: 'How does multithreading work?',
+    nav: 'Threads',
     short: 'You write ordinary blocking code and start thousands of goroutines; the runtime multiplexes them onto a handful of OS threads.',
     blocks: [
       {
@@ -327,6 +332,7 @@ func main() {
     id: 'modules',
     n: 6,
     q: 'How does library management work?',
+    nav: 'Libraries',
     short: 'go.mod, and the import path is the repository URL. There is no central registry.',
     blocks: [
       {
@@ -371,6 +377,7 @@ go test -bench=. -benchmem ./...   # benchmarks + allocation counts`,
     id: 'layout',
     n: 7,
     q: 'How does project structure work?',
+    nav: 'Project layout',
     short: 'A package is a directory. Capitalisation is the access modifier. internal/ is enforced by the compiler, not by convention.',
     blocks: [
       {
@@ -426,6 +433,7 @@ go build ./...              -> builds everything`,
     id: 'why',
     n: 8,
     q: 'Why do Datadog, Uber, Mistral and friends pick it?',
+    nav: 'Why pick Go',
     short: 'One static binary to deploy, predictable tail latency, cheap concurrency for I/O fan-out — and a stranger can read your code on day one.',
     blocks: [
       {
@@ -460,6 +468,7 @@ go build ./...              -> builds everything`,
     id: 'habits',
     n: 9,
     q: 'Anything else before I write code?',
+    nav: 'Before you start',
     short: 'Five habits that are not optional, and one trap that catches everybody exactly once.',
     blocks: [
       {
