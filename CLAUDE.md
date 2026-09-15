@@ -1,4 +1,4 @@
-# go-notes
+# go-go
 
 Static learning site: Go explained for a Java developer, every snippet runnable.
 Deployed to GitHub Pages; a Cloudflare Worker proxies code to the go.dev playground.
@@ -15,7 +15,7 @@ pnpm dev                 # site on :3000
 pnpm worker:dev          # runner proxy on :8787 (needed for Run buttons)
 pnpm typecheck
 pnpm verify:snippets     # compiles every snippet against the real Go toolchain
-BASE_PATH=/go-notes/ pnpm build
+BASE_PATH=/go-go/ pnpm build
 ```
 
 ## Architecture notes

@@ -1,4 +1,4 @@
-# Go notes
+# go-go
 
 Go explained for a Java developer, with every example editable and compiled by the real
 Go toolchain. Eleven sections, a Java→Go translation table, and a scratch playground.
@@ -24,13 +24,13 @@ pnpm dev                 # terminal 2 — site on :3000
 
 ```sh
 npx wrangler login
-pnpm worker:deploy       # prints https://go-notes-playground.<subdomain>.workers.dev
+pnpm worker:deploy       # prints https://go-go-runner.<subdomain>.workers.dev
 ```
 
 Then add the URL to the repo so CI can bake it in:
 
 ```sh
-gh variable set GO_RUNNER_URL --body "https://go-notes-playground.<subdomain>.workers.dev"
+gh variable set GO_RUNNER_URL --body "https://go-go-runner.<subdomain>.workers.dev"
 ```
 
 Add your Pages origin to `ALLOWED_ORIGIN` in `worker/index.ts` if it is not `*.github.io`.
