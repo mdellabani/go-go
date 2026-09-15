@@ -12,6 +12,20 @@ export type CompareRow = {
   note?: string
 }
 
+export type Challenge = {
+  id: string
+  prompt: string
+  expected: string
+  starter: string
+  solution: string
+}
+
+export type DocLink = {
+  label: string
+  href: string
+  note: string
+}
+
 export type Block =
   | { kind: 'p'; text: string }
   | { kind: 'ul'; items: string[] }
@@ -46,5 +60,6 @@ export type Step = {
   nav?: string
   problem: string
   learns: string[]
+  docs?: DocLink[]
   blocks: Block[]
 }

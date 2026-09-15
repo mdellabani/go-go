@@ -1,6 +1,8 @@
 import { Link, createFileRoute, notFound } from '@tanstack/react-router'
 import Blocks from '#/components/Blocks'
+import ChallengeBox from '#/components/ChallengeBox'
 import { track } from '#/content/track'
+import { exercises } from '#/content/exercises'
 
 export const Route = createFileRoute('/build/$stepId')({
   loader: ({ params }) => {
@@ -28,6 +30,7 @@ function StepPage() {
   const prev = track[idx - 1]
   const next = track[idx + 1]
   const pct = ((idx + 1) / track.length) * 100
+  const exercise = exercises[step.id]
 
   return (
     <main className="page-wrap px-4 pb-16 pt-8">
@@ -73,7 +76,7 @@ function StepPage() {
           </p>
         </div>
 
-        <div className="mb-9 flex flex-wrap items-center gap-2">
+        <div className="mb-4 flex flex-wrap items-center gap-2">
           <span className="kicker">this step forces</span>
           {step.learns.map((l) => (
             <span key={l} className="tag">
@@ -82,7 +85,31 @@ function StepPage() {
           ))}
         </div>
 
+        {exercise ? (
+          <div className="mb-9 flex flex-wrap items-center gap-2">
+            <span className="kicker">go doc</span>
+            {exercise.docs.map((d) => (
+              <a
+                key={d.label}
+                href={d.href}
+                target="_blank"
+                rel="noreferrer"
+                title={d.note}
+                className="tag tag-go no-underline hover:bg-[var(--link-bg-hover)]"
+              >
+                {d.label} ↗
+              </a>
+            ))}
+          </div>
+        ) : null}
+
         <Blocks blocks={step.blocks} />
+
+        {exercise ? (
+          <div className="mt-10">
+            <ChallengeBox challenge={exercise.challenge} />
+          </div>
+        ) : null}
       </article>
 
       <nav className="mt-14 flex flex-col gap-3 border-t-2 border-[var(--line-hard)] pt-6 sm:flex-row sm:items-center">

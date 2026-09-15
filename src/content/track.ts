@@ -470,7 +470,7 @@ func main() {
         snippet: {
           id: 'step-race',
           title: 'A counter that survives 1000 concurrent requests',
-          hint: 'Comment out the two mutex lines and the total usually still prints 1000 here, because the sandbox pins everything to one core. That is exactly why races hide — run it locally with -race, which detects the bug regardless of timing.',
+          hint: 'Delete the two mutex lines and Run: the total drops below 1000. Those are lost updates, and the playground scheduler is deterministic so you get the same wrong number every time. On real hardware it changes every run, which is why -race exists.',
           code: `package main
 
 import (

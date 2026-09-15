@@ -141,12 +141,14 @@ export default function Blocks({ blocks }: { blocks: Block[] }) {
 
           case 'run':
             return (
-              <section key={i} className="space-y-2">
+              <section key={b.snippet.id} className="space-y-2">
                 <h3 className="mono flex items-center gap-2 text-[0.8125rem] font-bold text-[var(--ink)]">
                   <span className="text-[var(--accent)]">▶</span>
                   {b.snippet.title}
                 </h3>
-                <GoRunner code={b.snippet.code} hint={b.snippet.hint} />
+                {/* keyed by snippet id: the editor seeds state on mount, so without a
+                    changing key React reuses the previous step's code */}
+                <GoRunner key={b.snippet.id} code={b.snippet.code} hint={b.snippet.hint} />
               </section>
             )
         }
