@@ -144,7 +144,7 @@ func main() {
       },
       {
         kind: 'p',
-        text: 'The rule in practice: if the method mutates the receiver, or the struct is large, or the type contains a sync.Mutex, use a pointer receiver. Keep it consistent across all methods on a type.',
+        text: 'Use a pointer receiver if the method mutates the receiver, if the struct is large, or if the type contains a sync.Mutex. Keep it consistent across all methods on a type.',
       },
       {
         kind: 'run',
@@ -392,7 +392,7 @@ func main() {
       },
       {
         kind: 'p',
-        text: 'Two rules that catch people. Deferred calls run last-in-first-out. And the arguments are evaluated at the moment you write defer, not when it runs — so defer fmt.Println(i) captures i as it is right now, while defer func(){ fmt.Println(i) }() reads it later.',
+        text: 'Deferred calls run last-in-first-out, and their arguments are evaluated at the moment you write defer, not when the call runs — so defer fmt.Println(i) captures i as it is right now, while defer func(){ fmt.Println(i) }() reads it later.',
       },
       {
         kind: 'run',
@@ -512,7 +512,7 @@ func main() {
       },
       {
         kind: 'code',
-        caption: 'The command that actually finds these',
+        caption: 'The command that finds these',
         code: `go test -race ./...     # run the suite with the race detector
 go run -race ./cmd/server
 
@@ -523,7 +523,7 @@ go run -race ./cmd/server
       {
         kind: 'aside',
         tone: 'rust',
-        text: 'This is the clearest place Rust is simply stronger: the borrow checker makes this bug unrepresentable, and Mutex<T> makes the lock own the data so you cannot read the field without taking the lock. Go puts them next to each other and trusts you, then ships an excellent detector for when that trust fails.',
+        text: 'This is the clearest place Rust is stronger: the borrow checker makes this bug unrepresentable, and Mutex<T> makes the lock own the data so you cannot read the field without taking the lock. Go puts them next to each other and trusts you, then ships a detector for when that trust fails.',
       },
     ],
   },
@@ -542,7 +542,7 @@ go run -race ./cmd/server
       },
       {
         kind: 'p',
-        text: 'The discipline that matters: whoever sends is responsible for closing, and ranging over a channel ends when it closes. Fire-and-forget goroutines with no coordination are how you lose work at shutdown.',
+        text: 'Whoever sends on a channel is responsible for closing it, and ranging over a channel ends when it closes. Fire-and-forget goroutines with no coordination are how you lose work at shutdown.',
       },
       {
         kind: 'run',
@@ -604,14 +604,14 @@ func main() {
   {
     id: 'context',
     n: 9,
-    title: 'context: deadlines that actually propagate',
+    title: 'context: deadlines that propagate',
     nav: 'context',
     problem: 'A slow database call should not hold a request open forever, and cancelling it must reach every layer.',
     learns: ['context.Context', 'WithTimeout', 'select', 'ctx.Done()'],
     blocks: [
       {
         kind: 'p',
-        text: 'Every *http.Request carries a Context that is cancelled when the client disconnects. By convention it is passed explicitly as the first parameter of every function that does I/O — ctx context.Context — all the way down to the database driver. That explicitness is the point: cancellation is visible in signatures instead of hiding in a ThreadLocal.',
+        text: 'Every *http.Request carries a Context that is cancelled when the client disconnects. By convention it is passed explicitly as the first parameter of every function that does I/O — ctx context.Context — all the way down to the database driver. Cancellation therefore appears in the signature of every function that can be cancelled, instead of hiding in a ThreadLocal.',
       },
       {
         kind: 'p',

@@ -88,7 +88,7 @@ func main() {
     blocks: [
       {
         kind: 'p',
-        text: 'In Java a method lives inside the class and `this` is invisible. In Go the type and its methods are separate declarations, and the receiver — Go’s `this` — is written explicitly in its own parens before the name. This is the only genuinely new syntax in the language.',
+        text: 'In Java a method lives inside the class and `this` is invisible. In Go the type and its methods are separate declarations, and the receiver — Go’s `this` — is written explicitly in its own parens before the name. It is the one declaration form with no Java counterpart.',
       },
       {
         kind: 'code',
@@ -154,11 +154,11 @@ func main() {
     n: 3,
     title: 'Implicit interfaces',
     nav: 'Interfaces',
-    blurb: 'The biggest idea in Go. Interfaces are declared by the consumer, not the producer.',
+    blurb: 'Interfaces are declared by the consumer, not the producer.',
     blocks: [
       {
         kind: 'p',
-        text: 'There is no `implements` keyword. A type satisfies an interface simply by having the right methods. The consequence is that interfaces get declared where they are used, stay tiny, and can be retrofitted onto types you do not own.',
+        text: 'There is no `implements` keyword. A type satisfies an interface by having the right methods. The consequence is that interfaces get declared where they are used, stay tiny, and can be retrofitted onto types you do not own.',
       },
       {
         kind: 'run',
@@ -328,7 +328,7 @@ func main() {
     blocks: [
       {
         kind: 'p',
-        text: 'error is an ordinary interface with one method. Nothing is thrown and nothing is caught. The verbosity is the point: every failure path is visible at the call site instead of hidden in a signature.',
+        text: 'error is an ordinary interface with one method. Nothing is thrown and nothing is caught. The verbosity buys visibility: every failure path appears at the call site, not in a signature you have to go and read.',
       },
       {
         kind: 'run',
@@ -702,11 +702,11 @@ func main() {
     n: 10,
     title: 'Debugging & profiling',
     nav: 'Debugging',
-    blurb: 'No JFR, no heap dump. Profiles instead — and they are good.',
+    blurb: 'No JFR, no heap dump. pprof instead, served over HTTP from the live process.',
     blocks: [
       {
         kind: 'p',
-        text: 'Add one blank import to a server and you get live CPU, heap, goroutine, mutex and block profiles over HTTP. The thing you genuinely lose versus MAT is the object graph: you cannot ask "who holds a reference to this". You infer ownership from the allocation site instead.',
+        text: 'Add one blank import to a server and you get live CPU, heap, goroutine, mutex and block profiles over HTTP. What you lose versus MAT is the object graph: you cannot ask "who holds a reference to this". You infer ownership from the allocation site instead.',
       },
       {
         kind: 'code',

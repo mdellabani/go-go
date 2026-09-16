@@ -112,7 +112,7 @@ go build -pgo=auto ./cmd/server`,
       },
       {
         kind: 'p',
-        text: 'The idea that actually reorganises how you design is implicit satisfaction. A type satisfies an interface by having the right methods. It never says so, and it does not import the interface. This inverts the dependency: in Java the producer declares "implements Serializable" and every implementation is coupled to the abstraction. In Go the consumer declares the interface it needs, right where it needs it, usually one method wide — and every type that already had that method satisfies it retroactively, including types from packages that were written years before your interface existed.',
+        text: 'A type satisfies an interface by having the right methods. It never declares that it does, and it does not import the interface. This inverts the dependency: in Java the producer declares "implements Serializable" and every implementation is coupled to the abstraction. In Go the consumer declares the interface it needs, right where it needs it, usually one method wide — and every type that already had that method satisfies it retroactively, including types from packages that were written years before your interface existed.',
       },
       {
         kind: 'run',
@@ -180,11 +180,11 @@ func main() {
       },
       {
         kind: 'p',
-        text: 'Structs are values. Assigning a struct copies it, passing one to a function copies it, and a []Point is one contiguous block of Points, not an array of pointers to scattered heap objects. This is the single biggest difference from Java for memory behaviour: cache locality is something you get by default rather than something you fight the language for.',
+        text: 'Structs are values. Assigning a struct copies it, passing one to a function copies it, and a []Point is one contiguous block of Points, not an array of pointers to scattered heap objects. Cache locality is therefore a default rather than something you fight the language for, which is the difference from Java that shows up most often in a profile.',
       },
       {
         kind: 'p',
-        text: 'The collector is a concurrent mark-sweep, non-generational and non-compacting, tuned hard for pause time rather than throughput. Pauses are sub-millisecond and essentially independent of heap size. You get two knobs: GOGC (collect when the heap has grown by this percent, default 100) and GOMEMLIMIT (a soft ceiling — set this in containers). Non-compacting means pointers are stable and no object ever moves, which is what makes cheap interop with C possible; the price is fragmentation the JVM would have compacted away.',
+        text: 'The collector is a concurrent mark-sweep, non-generational and non-compacting, tuned hard for pause time rather than throughput. Pauses are sub-millisecond and independent of heap size. You get two knobs: GOGC (collect when the heap has grown by this percent, default 100) and GOMEMLIMIT (a soft ceiling — set this in containers). Non-compacting means pointers are stable and no object ever moves, which is what makes cheap interop with C possible; the price is fragmentation the JVM would have compacted away.',
       },
       {
         kind: 'run',
@@ -260,7 +260,7 @@ func main() {
       },
       {
         kind: 'p',
-        text: 'The consequence that matters more than the cost: there is no async/await, and therefore no function colouring. A Go function that does I/O looks exactly like one that does not. When a goroutine blocks on a socket, the runtime parks it and runs something else on that thread; the syscall is non-blocking underneath and you never see it. This is why Go code reads like simple sequential code while behaving like an event loop, and it is the single largest ergonomic gap between Go and Rust async.',
+        text: 'There is no async/await, and therefore no function colouring. A Go function that does I/O looks exactly like one that does not. When a goroutine blocks on a socket, the runtime parks it and runs something else on that thread; the syscall is non-blocking underneath and you never see it. This is why Go code reads like simple sequential code while behaving like an event loop, and it is the widest ergonomic gap between Go and Rust async.',
       },
       {
         kind: 'p',
@@ -338,7 +338,7 @@ func main() {
       {
         kind: 'aside',
         tone: 'rust',
-        text: 'Rust prevents data races at compile time through ownership. Go does not — a race is a real, shippable bug. What Go gives you instead is go test -race and go run -race, a runtime detector that is genuinely excellent and belongs in your CI.',
+        text: 'Rust prevents data races at compile time through ownership. Go does not — a race is a real, shippable bug. What Go gives you instead is go test -race and go run -race, a runtime detector that instruments every memory access and shadow-tracks happens-before edges. It belongs in your CI.',
       },
     ],
   },
@@ -356,7 +356,7 @@ func main() {
       },
       {
         kind: 'p',
-        text: 'Version selection is the part worth knowing, because Go is deliberately the odd one out. Maven resolves conflicts by nearest-wins, Cargo picks the newest version compatible with all requirements. Go uses Minimal Version Selection: it takes the highest version that anyone in your dependency graph explicitly asked for, and nothing newer. Builds are therefore reproducible without a lockfile, and upgrades only happen when someone edits go.mod. Slightly startling the first time; it removes an entire category of "it broke overnight" incidents.',
+        text: 'Version selection is where Go is deliberately the odd one out. Maven resolves conflicts by nearest-wins, Cargo picks the newest version compatible with all requirements. Go uses Minimal Version Selection: it takes the highest version that anyone in your dependency graph explicitly asked for, and nothing newer. Builds are therefore reproducible without a lockfile, and upgrades only happen when someone edits go.mod. It removes an entire category of "it broke overnight" incidents, at the cost of never getting a fix you did not ask for.',
       },
       {
         kind: 'p',
@@ -464,16 +464,16 @@ go build ./...              -> builds everything`,
       },
       {
         kind: 'p',
-        text: 'The inverse is worth stating just as plainly. Go is not the language of numerical kernels, inference engines or anything that wants SIMD, manual memory layout, or zero-cost abstraction — that work is C++, Rust and CUDA. At an AI company, Go is overwhelmingly the control plane: the API gateway, the scheduler, the routing and queueing layer, the observability and orchestration tooling. The model runs somewhere else, and it is not written in Go. Control plane and data plane are different engineering problems; Go is an unusually good answer to one of them and a poor answer to the other.',
+        text: 'Go is not the language of numerical kernels, inference engines or anything that wants SIMD, manual memory layout, or zero-cost abstraction — that work is C++, Rust and CUDA. At an AI company, Go is overwhelmingly the control plane: the API gateway, the scheduler, the routing and queueing layer, the observability and orchestration tooling. The model runs somewhere else, and it is not written in Go. Control plane and data plane are different engineering problems; Go is an unusually good answer to one of them and a poor answer to the other.',
       },
       {
         kind: 'compare',
         caption: 'Where each one wins',
         rows: [
-          { java: 'huge ecosystem, mature frameworks', rust: 'maximum performance, no GC', go: 'operational simplicity', note: 'pick the axis you actually need' },
+          { java: 'huge ecosystem, mature frameworks', rust: 'maximum performance, no GC', go: 'operational simplicity', note: 'pick the axis your system is constrained by' },
           { java: 'best-in-class throughput after warmup', rust: 'best latency and footprint', go: 'best latency-per-effort', note: 'Go is the pragmatic middle' },
           { java: 'weeks to master Spring', rust: 'months to fight the borrow checker', go: 'a productive week', note: 'onboarding cost is a real business input' },
-          { java: 'control plane and data plane', rust: 'data plane, kernels, embedded', go: 'control plane, networking, CLIs', note: 'the honest division of labour' },
+          { java: 'control plane and data plane', rust: 'data plane, kernels, embedded', go: 'control plane, networking, CLIs', note: 'the division of labour in practice' },
         ],
       },
     ],
@@ -484,7 +484,7 @@ go build ./...              -> builds everything`,
     n: 9,
     q: 'Anything else before I write code?',
     nav: 'Before you start',
-    short: 'Five habits that are not optional, and one trap that catches everybody exactly once.',
+    short: 'Five conventions every Go codebase assumes you follow, and one nil check that is not what it looks like.',
     blocks: [
       {
         kind: 'ul',
@@ -533,7 +533,7 @@ func main() {
       {
         kind: 'aside',
         tone: 'warn',
-        text: 'If you remember one thing from this page: an interface value is a pair of (type, value), and it is nil only when both halves are nil. Every confused nil check in Go traces back to that sentence.',
+        text: 'An interface value is a pair of (type, value), and it is nil only when both halves are nil. Every confused nil check in Go traces back to that.',
       },
     ],
   },
