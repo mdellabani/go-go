@@ -34,6 +34,7 @@ export type Block =
   | { kind: 'code'; code: string; caption?: string }
   | { kind: 'run'; snippet: Snippet }
   | { kind: 'aside'; tone: 'java' | 'rust' | 'warn'; text: string }
+  | { kind: 'diagram'; svg: string; caption?: string; alt: string }
 
 export type Section = {
   id: string

@@ -745,14 +745,14 @@ go tool pprof -base old.pprof new.pprof                # LEAK HUNT: diff two hea
     n: 11,
     title: 'Gotchas',
     nav: 'Gotchas',
-    blurb: 'The list worth flashcarding. Each one has bitten everybody.',
+    blurb: 'The failures that compile cleanly and are wrong at runtime.',
     blocks: [
       {
         kind: 'run',
         snippet: {
           id: 'gotchas-nil-interface',
           title: 'The nil interface trap',
-          hint: 'This is the #1 Go interview question. An interface is (type, value) — it is only nil when BOTH are nil.',
+          hint: 'An interface value is a pair — (type, value) — and it is nil only when both halves are nil. Here the type half is *MyErr, so the comparison fails.',
           code: `package main
 
 import "fmt"

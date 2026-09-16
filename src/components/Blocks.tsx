@@ -51,6 +51,23 @@ export default function Blocks({ blocks }: { blocks: Block[] }) {
               </figure>
             )
 
+          case 'diagram':
+            return (
+              <figure key={i} className="panel overflow-hidden rounded-lg">
+                {b.caption ? (
+                  <figcaption className="kicker border-b-2 border-[var(--line-hard)] bg-[var(--foam)] px-3 py-2">
+                    {b.caption}
+                  </figcaption>
+                ) : null}
+                <div
+                  role="img"
+                  aria-label={b.alt}
+                  className="overflow-x-auto px-3 py-4 [&_svg]:block [&_svg]:h-auto [&_svg]:w-full [&_svg]:min-w-[560px]"
+                  dangerouslySetInnerHTML={{ __html: b.svg }}
+                />
+              </figure>
+            )
+
           case 'aside':
             return (
               <aside

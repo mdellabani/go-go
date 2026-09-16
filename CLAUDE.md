@@ -46,6 +46,9 @@ Audience is senior engineers, not beginners. Comparisons use **Java and Rust col
 
 - Prerendered pages are **derived from the content** in `vite.config.ts`. Adding a question,
   step or section needs no second edit.
+- Diagrams are inline SVG strings in `src/content/diagrams.ts`, rendered by the `diagram` block.
+  They colour themselves from the CSS vars through an embedded `<style>`, so they follow the theme —
+  never hardcode a colour. Text is laid out by hand: JetBrains Mono advances 0.6em per character.
 - Every snippet must compile. `pnpm verify:snippets` checks all three content files against the
   real Go toolchain and runs in CI.
 - Build-track snippets drive handlers with `httptest.NewRecorder`. The playground sandbox has

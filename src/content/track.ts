@@ -15,7 +15,7 @@ export const track: Step[] = [
       },
       {
         kind: 'p',
-        text: 'Read the handler signature carefully, because every handler you write for the rest of your life has it. func hello(w http.ResponseWriter, r *http.Request) takes two parameters and returns nothing. w is where you write the response — it is an interface, so it is already a value you can write to. r is a pointer to the request; a pointer because requests are large and copying one per call would be waste, not because you are going to mutate it.',
+        text: 'That signature is the entire contract, and it never changes: func hello(w http.ResponseWriter, r *http.Request) takes two parameters and returns nothing. w is where you write the response — it is an interface, so it is already a value you can write to. r is a pointer to the request; a pointer because requests are large and copying one per call would be waste, not because you are going to mutate it.',
       },
       {
         kind: 'run',
@@ -140,7 +140,7 @@ func main() {
     blocks: [
       {
         kind: 'p',
-        text: 'A value receiver gets a copy of the struct. Mutating it mutates the copy, the copy is discarded when the method returns, and nothing happens — with no error and no warning. This bites everybody once, and it is the direct consequence of structs being values rather than references.',
+        text: 'A value receiver gets a copy of the struct. Mutating it mutates the copy, the copy is discarded when the method returns, and nothing happens — with no error and no warning. It is the direct consequence of structs being values rather than references, and no tool in the toolchain will flag it.',
       },
       {
         kind: 'p',
@@ -298,7 +298,7 @@ func main() {
     blocks: [
       {
         kind: 'p',
-        text: 'There are no exceptions. A function that can fail returns an extra value of type error, and the caller checks it immediately. The upside is that every failure path is visible in the signature; the cost is the if err != nil you have heard complaints about.',
+        text: 'There are no exceptions. A function that can fail returns an extra value of type error, and the caller checks it immediately. The upside is that every failure path is visible in the signature; the cost is that the error path is written out longhand, every time.',
       },
       {
         kind: 'p',
@@ -695,7 +695,7 @@ func main() {
       },
       {
         kind: 'p',
-        text: 'The returned handler is a closure. It captures next — and anything else in scope, like a logger or a config value — and keeps it alive for as long as the handler exists. http.HandlerFunc is the adapter that turns a bare function into an http.Handler: it is a named function type with a ServeHTTP method defined on it, which is a neat trick worth reading twice.',
+        text: 'The returned handler is a closure. It captures next — and anything else in scope, like a logger or a config value — and keeps it alive for as long as the handler exists. http.HandlerFunc is the adapter that turns a bare function into an http.Handler: it is a named function type that has a ServeHTTP method defined on it, so the function value is its own implementation.',
       },
       {
         kind: 'run',

@@ -1,4 +1,5 @@
 import type { Question } from './types'
+import { compilationChain } from './diagrams.ts'
 
 export const orientation: Question[] = [
   {
@@ -14,7 +15,21 @@ export const orientation: Question[] = [
       },
       {
         kind: 'p',
-        text: 'The nuance worth having straight, because interviewers ask it: Go does have a runtime. The scheduler, the garbage collector, the allocator and the stack-growth machinery are all real, and they are all statically linked into your binary. The difference from the JVM is not "no runtime" — it is that the runtime ships inside the artifact instead of being installed underneath it, and it does not interpret or re-compile your code at any point.',
+        text: 'Go does have a runtime, and the word means something narrower than it does on the JVM. Go\'s runtime is a library. The linker statically links it into every binary next to your own code, and it — not your main — is the program\'s real entry point: it brings up the heap, the scheduler and the first OS thread, then calls main.main. There is no separate process supervising yours, no class loader, no bytecode verifier and no JIT. Nothing re-examines or re-compiles your code after the linker has finished with it.',
+      },
+      {
+        kind: 'p',
+        text: 'What that library carries is substantial. The goroutine scheduler, which multiplexes goroutines onto OS threads and does the work a thread pool would otherwise do. The concurrent mark-sweep collector. A size-class allocator with per-thread caches, so most allocations never touch a global lock. The stack-growth machinery that lets a goroutine start at 2KB and grow by copying itself somewhere larger. The netpoller, which turns your blocking Read into an epoll registration and parks the goroutine instead of the thread. And the type metadata that reflection, interface dispatch and the collector all read at runtime. That is roughly 1.5–2MB of binary and a few hundred KB of resident memory before your program does anything of its own. It is not free — it is just already in the file.',
+      },
+      {
+        kind: 'diagram',
+        caption: 'Where each toolchain stops',
+        alt: 'Two pipelines. Go: .go files, go build, link, static binary, exec. Java: .java files, javac, jar, JRE on the host, C1 then C2. A dashed line marks the deploy boundary: all Go compilation happens before it, most JVM compilation after it.',
+        svg: compilationChain,
+      },
+      {
+        kind: 'p',
+        text: 'Both toolchains compile to machine code. The difference is which side of the deploy boundary they finish on. Go does all of it on your build machine and ships the result; the JVM ships bytecode and finishes the job on the host, in-process, every time you start. Warmup, tiered compilation, deoptimisation and recompilation storms are all consequences of that one placement decision — and so is the JVM\'s ability to optimise using facts that only exist at runtime.',
       },
       {
         kind: 'compare',
@@ -48,7 +63,7 @@ export const orientation: Question[] = [
       },
       {
         kind: 'p',
-        text: 'That trade cuts both ways and you should be able to argue both sides. Go wins on startup, on predictability, and on the absence of warmup, deoptimisation and recompilation storms. The JVM can win on a long-running hot loop, because C2 gets to speculate on what actually happened — devirtualising a call site that turned out to be monomorphic, for instance — and Go has to be conservative about the same code forever.',
+        text: 'The trade runs in both directions. Go wins on startup, on predictability, and on the absence of warmup, deoptimisation and recompilation storms. The JVM can win on a long-running hot loop, because C2 gets to speculate on what actually happened — devirtualising a call site that turned out to be monomorphic, for instance — and Go has to be conservative about the same code forever.',
       },
       {
         kind: 'p',
@@ -432,7 +447,7 @@ go build ./...              -> builds everything`,
   {
     id: 'why',
     n: 8,
-    q: 'Why do Datadog, Uber, Mistral and friends pick it?',
+    q: 'Why do Datadog, Uber and Mistral pick it?',
     nav: 'Why pick Go',
     short: 'One static binary to deploy, predictable tail latency, cheap concurrency for I/O fan-out — and a stranger can read your code on day one.',
     blocks: [
@@ -449,7 +464,7 @@ go build ./...              -> builds everything`,
       },
       {
         kind: 'p',
-        text: 'Be equally clear about where it is not the answer, because that is what separates a considered opinion from enthusiasm. Go is not the language of numerical kernels, inference engines or anything that wants SIMD, manual memory layout, or zero-cost abstraction — that work is C++, Rust and CUDA. At an AI company, Go is overwhelmingly the control plane: the API gateway, the scheduler, the routing and queueing layer, the observability and orchestration tooling. The model runs somewhere else. Knowing which half of the stack you are interviewing for is the useful insight.',
+        text: 'The inverse is worth stating just as plainly. Go is not the language of numerical kernels, inference engines or anything that wants SIMD, manual memory layout, or zero-cost abstraction — that work is C++, Rust and CUDA. At an AI company, Go is overwhelmingly the control plane: the API gateway, the scheduler, the routing and queueing layer, the observability and orchestration tooling. The model runs somewhere else, and it is not written in Go. Control plane and data plane are different engineering problems; Go is an unusually good answer to one of them and a poor answer to the other.',
       },
       {
         kind: 'compare',
